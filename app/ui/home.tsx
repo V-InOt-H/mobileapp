@@ -11,14 +11,15 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-const router = useRouter();
+
 const { width, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const COLLAPSED_HEIGHT = 260;
 const EXPANDED_HEIGHT = SCREEN_HEIGHT * 0.65;
 
 export default function HomeScreen() {
-  /* ---------- BOTTOM SHEET LOGIC ---------- */
+  const router = useRouter();
+
   const translateY = useRef(
     new Animated.Value(SCREEN_HEIGHT - COLLAPSED_HEIGHT)
   ).current;
@@ -38,11 +39,11 @@ export default function HomeScreen() {
       },
 
       onPanResponderRelease: (_, g) => {
-        const expand = g.dy < 0;
         Animated.spring(translateY, {
-          toValue: expand
-            ? SCREEN_HEIGHT - EXPANDED_HEIGHT
-            : SCREEN_HEIGHT - COLLAPSED_HEIGHT,
+          toValue:
+            g.dy < 0
+              ? SCREEN_HEIGHT - EXPANDED_HEIGHT
+              : SCREEN_HEIGHT - COLLAPSED_HEIGHT,
           useNativeDriver: true,
         }).start();
       },
@@ -61,21 +62,16 @@ export default function HomeScreen() {
           longitudeDelta: 0.08,
         }}
       >
-        <Marker
-          coordinate={{ latitude: 13.0827, longitude: 80.2707 }}
-          title="Chennai"
-        />
+        <Marker coordinate={{ latitude: 13.0827, longitude: 80.2707 }} />
       </MapView>
 
-      {/* INTERACTIVE BOTTOM SHEET */}
+      {/* BOTTOM SHEET */}
       <Animated.View
         style={[styles.bottomSheet, { transform: [{ translateY }] }]}
         {...panResponder.panHandlers}
       >
-        {/* DRAG HANDLE */}
         <View style={styles.dragHandle} />
 
-        {/* PLAN CARD */}
         <View style={styles.card}>
           <View style={styles.planRow}>
             <Ionicons name="arrow-forward" size={20} color="#fff" />
@@ -86,7 +82,6 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        {/* OPTIONS */}
         <View style={styles.optionsRow}>
           <Option icon="bus" label="Bus" color="#F3C623" />
           <Option icon="train" label="Train" color="#6BC4B5" />
@@ -94,63 +89,24 @@ export default function HomeScreen() {
           <Option icon="ticket-alt" label="Passes" color="#4C63FF" />
         </View>
 
-        {/* BUS TICKET */}
         <TouchableOpacity
           style={styles.busTicket}
           onPress={() => router.push("/bus-ticket")}
-          >
+        >
           <FontAwesome5 name="bus" size={20} color="#fff" />
           <Text style={styles.busTicketText}>BUS TICKET</Text>
         </TouchableOpacity>
       </Animated.View>
-
-      {/* BOTTOM NAV */}
-      <View style={styles.bottomNav}>
-        <NavItem icon="home" label="Home" active />
-        <NavItem icon="credit-card" label="Passes" />
-        <NavItem icon="radio-button-on" label="Live" />
-        <NavItem icon="confirmation-number" label="Ticket" />
-        <NavItem icon="person" label="Profile" />
-      </View>
     </View>
   );
 }
 
-/* ---------- SMALL COMPONENTS ---------- */
-
-function Option({ icon, label, color }: any) {
-  return (
-    <View style={styles.optionItem}>
-      <View style={[styles.optionCircle, { backgroundColor: color }]}>
-        <FontAwesome5 name={icon} size={18} color="#333" />
-      </View>
-      <Text style={styles.optionText}>{label}</Text>
-    </View>
-  );
-}
-
-function NavItem({ icon, label, active }: any) {
-  return (
-    <View style={styles.navItem}>
-      <MaterialIcons
-        name={icon}
-        size={24}
-        color={active ? "#E53935" : "#999"}
-      />
-      <Text style={[styles.navText, active && { color: "#E53935" }]}>
-        {label}
-      </Text>
-    </View>
-  );
-}
-
-/* ---------- STYLES ---------- */
+/* ================= STYLES ================= */
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F5F6FA" },
 
-  map: { ...StyleSheet.absoluteFillObject,
-  },
+  map: { ...StyleSheet.absoluteFillObject },
 
   bottomSheet: {
     position: "absolute",
@@ -181,6 +137,7 @@ const styles = StyleSheet.create({
 
   planRow: { flexDirection: "row", alignItems: "center" },
   planText: { color: "#fff", marginLeft: 8 },
+
   questionText: {
     color: "#fff",
     fontSize: 20,
@@ -195,6 +152,7 @@ const styles = StyleSheet.create({
   },
 
   optionItem: { alignItems: "center" },
+
   optionCircle: {
     width: 54,
     height: 54,
@@ -202,6 +160,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   optionText: { marginTop: 6 },
 
   busTicket: {
@@ -215,20 +174,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  busTicketText: { color: "#fff", fontWeight: "600", marginLeft: 8 },
-
-  bottomNav: {
-    position: "absolute",
-    bottom: 0,
-    width,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "#fff",
+  busTicketText: {
+    color: "#fff",
+    fontWeight: "600",
+    marginLeft: 8,
   },
-
-  navItem: { alignItems: "center" },
-  navText: { fontSize: 10, color: "#999", marginTop: 2 },
 });
+
+/* ---------- COMPONENTS ---------- */
+
+function Option({ icon, label, color }: any) {
+  return (
+    <View style={styles.optionItem}>
+      <View style={[styles.optionCircle, { backgroundColor: color }]}>
+        <FontAwesome5 name={icon} size={18} color="#333" />
+      </View>
+      <Text style={styles.optionText}>{label}</Text>
+    </View>
+  );
+}

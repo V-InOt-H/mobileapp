@@ -1,0 +1,121 @@
+{
+  "routes": [
+    {
+      "routeNo": "578",
+      "directions": [
+        {
+          "from": "CHEMBARAMBAKKAM",
+          "to": "POONAMALLE B.T"
+        },
+        {
+          "from": "POONAMALLE B.T",
+          "to": "CHEMBARAMBAKKAM"
+        }
+      ]
+    },
+    {
+      "routeNo": "53G",
+      "directions": [
+        {
+          "from": "CHEMBARAMBAKKAM",
+          "to": "POONAMALLE B.T"
+        },
+        {
+          "from": "POONAMALLE B.T",
+          "to": "CHEMBARAMBAKKAM"
+        }
+      ]
+    },
+    {
+      "routeNo": "549",
+      "directions": [
+        {
+          "from": "CHEMBARAMBAKKAM",
+          "to": "POONAMALLE B.T"
+        },
+        {
+          "from": "POONAMALLE B.T",
+          "to": "CHEMBARAMBAKKAM"
+        }
+      ]
+    },
+    {
+      "routeNo": "101",
+      "directions": [
+        {
+          "from": "POONAMALLE B.T",
+          "to": "ROHINI THEATRE"
+        },
+        {
+          "from": "ROHINI THEATRE",
+          "to": "POONAMALLE B.T"
+        }
+      ]
+    },
+    {
+      "routeNo": "153P",
+      "directions": [
+        {
+          "from": "M.G.R.KOYAMBEDU",
+          "to": "CHEMBARAMBAKKAM"
+        },
+        {
+          "from": "CHEMBARAMBAKKAM",
+          "to": "M.G.R.KOYAMBEDU"
+        }
+      ]
+    },
+    {
+      "routeNo": "153A",
+      "directions": [
+        {
+          "from": "M.G.R.KOYAMBEDU",
+          "to": "NAZARETHPETTAI"
+        },
+        {
+          "from": "NAZARETHPETTAI",
+          "to": "M.G.R.KOYAMBEDU"
+        }
+      ]
+    },
+    {
+      "routeNo": "153",
+      "directions": [
+        {
+          "from": "M.G.R.KOYAMBEDU",
+          "to": "POONAMALLE B.T"
+        },
+        {
+          "from": "POONAMALLE B.T",
+          "to": "M.G.R.KOYAMBEDU"
+        }
+      ]
+    },
+    {
+      "routeNo": "111",
+      "directions": [
+        {
+          "from": "VELAPANCHAVADI",
+          "to": "M.G.R.KOYAMBEDU"
+        },
+        {
+          "from": "M.G.R.KOYAMBEDU",
+          "to": "VELAPANCHAVADI"
+        }
+      ]
+    },
+    {
+      "routeNo": "72",
+      "directions": [
+        {
+          "from": "VELAPANCHAVADI",
+          "to": "M.G.R.KOYAMBEDU"
+        },
+        {
+          "from": "M.G.R.KOYAMBEDU",
+          "to": "VELAPANCHAVADI"
+        }
+      ]
+    }
+  ]
+}
