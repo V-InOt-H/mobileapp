@@ -1,13 +1,99 @@
 import { useLocalSearchParams } from "expo-router";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Path, Svg } from "react-native-svg";
+import Svg, { Path, Rect } from "react-native-svg";
+
+/* ================= TEAR EDGE ================= */
+
+// Generate a small localized tear pattern
+const generateLocalTearPattern = () => {
+  const WIDTH = 120; // Smaller width for localized tear
+  const HEIGHT = 13;
+  const depths = [];
+  
+  // Create irregular wave-like pattern
+  let x = 0;
+  while (x <= WIDTH) {
+    const chunkWidth = 8 + Math.random() * 15;
+    
+    const rand = Math.random();
+    let depth;
+    if (rand < 0.3) {
+      depth = HEIGHT * 0.2;
+    } else if (rand < 0.6) {
+      depth = HEIGHT * 0.4;
+    } else {
+      depth = HEIGHT * (0.6 + Math.random() * 0.4);
+    }
+    
+    depths.push({ x, depth });
+    x += chunkWidth;
+  }
+  
+  depths.push({ x: WIDTH, depth: depths[depths.length - 1].depth });
+  
+  return depths;
+};
+
+const tearDepths = generateLocalTearPattern();
+
+function TearEdge({
+  position = "top",
+  backgroundColor = "#1F57D6",
+}: {
+  position?: "top" | "bottom";
+  backgroundColor?: string;
+}) {
+  const WIDTH = 120;
+  const HEIGHT = 15;
+  
+  const points = [];
+  
+  for (let i = 0; i < tearDepths.length; i++) {
+    const { x, depth } = tearDepths[i];
+    const y = position === "top" 
+      ? depth  // Ridges go down from top
+      : HEIGHT - depth;  // Ridges go up from bottom
+    points.push(`${x},${y}`);
+  }
+  
+  if (position === "top") {
+    points.push(`${WIDTH},${HEIGHT}`);
+    points.push(`0,${HEIGHT}`);
+  } else {
+    points.push(`${WIDTH},0`);
+    points.push(`0,0`);
+  }
+  
+  const pathData = `M ${points.join(" L ")} Z`;
+
+  return (
+    <Svg
+      width={WIDTH}
+      height={HEIGHT}
+      viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+      style={{ 
+        position: 'absolute', 
+        [position]: position === "top" ? -HEIGHT : -1, // Adjust bottom position
+        left: 40,
+        zIndex: 100 
+      }}
+    >
+      <Path
+        d={pathData}
+        fill="#fff"
+      />
+    </Svg>
+  );
+}
+
+/* ================= MAIN SCREEN ================= */
 
 export default function TicketView() {
   const { route, from, to, fare, ticketNo, validity } =
     useLocalSearchParams();
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "#1F57D6" }}>
+    <ScrollView style={styles.screen}>
       <View style={styles.container}>
 
         {/* HEADER */}
@@ -19,16 +105,11 @@ export default function TicketView() {
         {/* TICKET */}
         <View style={styles.ticketWrapper}>
 
-          {/* TOP TORN */}
-          <Svg height="22" width="100%" viewBox="0 0 400 20">
-            <Path
-              d="M0 20 Q20 0 40 20 T80 20 T120 20 T160 20 T200 20 T240 20 T280 20 T320 20 T360 20 T400 20"
-              fill="#fff"
-            />
-          </Svg>
-
           {/* BODY */}
           <View style={styles.ticketBody}>
+
+            {/* TOP TEAR - positioned at exact top */}
+            <TearEdge position="top" />
 
             {/* WATERMARK */}
             <View style={styles.watermarkContainer}>
@@ -105,24 +186,25 @@ export default function TicketView() {
             <Text style={styles.tamil}>
               பயணம் செய்தமைக்கு நன்றி
             </Text>
-          </View>
 
-          {/* BOTTOM TORN */}
-          <Svg height="22" width="100%" viewBox="0 0 400 20">
-            <Path
-              d="M0 0 Q20 20 40 0 T80 0 T120 0 T160 0 T200 0 T240 0 T280 0 T320 0 T360 0 T400 0"
-              fill="#fff"
-            />
-          </Svg>
+            {/* BOTTOM TEAR - positioned at exact bottom */}
+            <TearEdge position="bottom" />
+          </View>
 
         </View>
       </View>
     </ScrollView>
   );
 }
+
 /* ================= STYLES ================= */
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: "#1F57D6",
+  },
+
   container: {
     padding: 16,
   },
@@ -143,13 +225,12 @@ const styles = StyleSheet.create({
 
   ticketWrapper: {
     backgroundColor: "#fff",
-    borderRadius: 22,
-    overflow: "hidden",
+    borderRadius: 0,
+    overflow: "visible",
   },
 
   ticketBody: {
     padding: 40,
-    backgroundColor: "#fff",
     position: "relative",
   },
 
@@ -210,4 +291,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
